@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMB TEAM DVP</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #2c3e50;
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-items {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-items a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-items a:hover {
+            color: #3498db;
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 4rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Pages */
+        .page {
+            display: none;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Home Page */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .service-card {
+            padding: 1.5rem;
+            border-radius: 8px;
+            background: #f8f9fa;
+            text-align: center;
+        }
+
+        /* Portfolio Page */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .portfolio-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .portfolio-item img {
+            width: 100%;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        /* Chat Styles */
+        .chat-container {
+            display: flex;
+            gap: 1rem;
+            height: 70vh;
+        }
+
+        .chat-sidebar {
+            flex: 1;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            max-width: 250px;
+        }
+
+        .chat-main {
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .message.received {
+            background: #e9ecef;
+            margin-right: 20%;
+        }
+
+        .message.sent {
+            background: #3498db;
+            color: white;
+            margin-left: 20%;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .chat-input input {
+            flex-grow: 1;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* Online Users */
+        .online-users {
+            margin-bottom: 1rem;
+        }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+
+        .user-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #2ecc71;
+        }
+
+        /* Registration/Login Form */
+        .auth-form {
+            max-width: 400px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .btn {
+            background: #3498db;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-links">
+            <a href="#" class="logo">SMB TEAM DVP</a>
+            <div class="nav-items">
+                <a href="#" data-page="home">Home</a>
+                <a href="#" data-page="portfolio">Portfolio</a>
+                <a href="#" data-page="services">Services</a>
+                <a href="#" data-page="register">Register</a>
+                <a href="#" data-page="chat">Chat</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <div class="hero">
+                <h1>Welcome to SMB TEAM DVP</h1>
+                <p>Innovative Game Development Solutions</p>
+            </div>
+            <div class="services">
+                <div class="service-card">
+                    <h3>Game Development</h3>
+                    <p>Custom games, mods, and expansion packs</p>
+                </div>
+                <div class="service-card">
+                    <h3>Tool Development</h3>
+                    <p>Professional game modding and development tools</p>
+                </div>
+                <div class="service-card">
+                    <h3>Consultation</h3>
+                    <p>Expert guidance for your game projects</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Portfolio Page -->
+        <div id="portfolio" class="page">
+            <h2>Our Portfolio</h2>
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <img src="/api/placeholder/300/200" alt="Project 1">
+                    <h3>Custom Game Engine</h3>
+                    <p>A versatile game engine for indie developers</p>
+                </div>
+                <div class="portfolio-item">
+                    <img src="/api/placeholder/300/200" alt="Project 2">
+                    <h3>Modding Tools</h3>
+                    <p>Professional tools for game modification</p>
+                </div>
+                <div class="portfolio-item">
+                    <img src="/api/placeholder/300/200" alt="Project 3">
+                    <h3>Game Assets</h3>
+                    <p>High-quality game assets and resources</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Page -->
+        <div id="services" class="page">
+            <h2>Our Services</h2>
+            <div class="services">
+                <div class="service-card">
+                    <h3>Game Development</h3>
+                    <p>We create custom games, mods, and expansion packs tailored to your needs. Our team has extensive experience in various game engines and platforms.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Tool Development</h3>
+                    <p>Professional development tools including modding tools, level designers, and asset management solutions.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Consultation</h3>
+                    <p>Expert guidance on game development, optimization, and implementation strategies.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Registration Page -->
+        <div id="register" class="page">
+            <div class="auth-form">
+                <h2>Register</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ingameName">In-game Name</label>
+                        <input type="text" id="ingameName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="occName">OCC Name</label>
+                        <input type="text" id="occName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="whatsapp">WhatsApp Number</label>
+                        <input type="tel" id="whatsapp" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select id="role" required>
+                            <option value="">Select Role</option>
+                            <option value="player">Player</option>
+                            <option value="developer">Developer</option>
+                            <option value="mod">Moderator</option>
+                            <option value="admin">Administrator</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" required>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="submit" class="btn">Submit</button>
+                        <button type="reset" class="btn btn-secondary">Clear</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Chat Page -->
+        <div id="chat" class="page">
+            <div class="chat-container">
+                <div class="chat-sidebar">
+                    <h3>Online Users</h3>
+                    <div class="online-users">
+                        <div class="user-item">
+                            <span class="user-status"></span>
+                            <span>User 1</span>
+                        </div>
+                        <div class="user-item">
+                            <span class="user-status"></span>
+                            <span>User 2</span>
+                        </div>
+                        <div class="user-item">
+                            <span class="user-status"></span>
+                            <span>User 3</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-main">
+                    <div class="chat-messages">
+                        <div class="message received">
+                            <strong>User 1:</strong> Hello everyone!
+                        </div>
+                        <div class="message sent">
+                            <strong>You:</strong> Hi there!
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" placeholder="Type your message..." id="messageInput">
+                        <button class="btn" id="sendMessage">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 SMB TEAM DVP. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Navigation
+        document.querySelectorAll('.nav-items a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('data-page');
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                document.getElementById(pageId).classList.add('active');
+            });
+        });
+
+        // Registration Form
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = {
+                email: document.getElementById('email').value,
+                ingameName: document.getElementById('ingameName').value,
+                occName: document.getElementById('occName').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                role: document.getElementById('role').value,
+                password: document.getElementById('password').value,
+                confirmPassword: document.getElementById('confirmPassword').value
+            };
+
+            if (formData.password !== formData.confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+
+            // Here you would typically send this data to a server
+            console.log('Registration submitted:', formData);
+            alert('Registration successful!');
+            
+            // Clear form
+            e.target.reset();
+        });
+
+        // Chat Functionality
+        const chatMessages = document.querySelector('.chat-messages');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendMessage');
+
+        function addMessage(message, isSent = true) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isSent ? 'sent' : 'received'}`;
+            messageDiv.innerHTML = `<strong>${isSent ? 'You' : 'User'}:</strong> ${message}`;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value.trim();
+            if (message) {
+                addMessage(message);
+                messageInput.value = '';
+            }
+        });
+
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendButton.click();
+            }
+        });
+    </script>
+</body>
+</html>
